@@ -1,11 +1,9 @@
-<center>
-<img src="./packages/client/public/logo.png" />
+<p align="center">
+  <img alt="Zen Trust Logo" src="./packages/client/public/logo.png" />
+</p>
 
 Zen Trust
 =========
-</center>
-
-----
 
 Zen Trust is a self-hosted SSH certificate authority, providing short-lived certificates for users and hosts.
 
@@ -19,10 +17,11 @@ Zen Trust is a self-hosted SSH certificate authority, providing short-lived cert
 * SSH agent forwarding
 
 ## Todo list
+
 - [ ] SSH certificate bundling
 - [ ] Implement OAuth
 - [ ] Use [RFC9470](https://datatracker.ietf.org/doc/html/rfc9470) to swap the encryption session stuff for re-auth
-      using stronger mechanisms     
+  using stronger mechanisms
 
 ## Installation
 
@@ -46,11 +45,11 @@ Command line interface for zen
 
 #### Options
 
-| Argument | Alias | Type | Description |
-|-|-|-|-|
-| **name** | **n** | string | Optional.  |
-| **config** | **c** | string | Optional. Path to a config file |
-| **help** | **h** | boolean | Show this help message |
+| Argument   | Alias | Type    | Description                     |
+|------------|-------|---------|---------------------------------|
+| **name**   | **n** | string  | Optional.                       |
+| **config** | **c** | string  | Optional. Path to a config file |
+| **help**   | **h** | boolean | Show this help message          |
 
 #### Amendments
 
