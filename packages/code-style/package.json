@@ -1,0 +1,45 @@
+{
+  "name": "@zen-trust/code-style",
+  "version": "0.0.0",
+  "private": true,
+  "license": "ISC",
+  "scripts": {
+    "dev": "exit 0",
+    "build": "exit 0",
+    "test": "exit 0"
+  },
+  "files": [
+    "eslint",
+    "prettier",
+    "typescript.json"
+  ],
+  "prettier": "./prettier",
+  "eslintConfig": {
+    "extends": "./eslint"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.5.1",
+    "@vercel/style-guide": "^5.0.1",
+    "eslint": "^8.50.0",
+    "prettier": "^3.0.3"
+  },
+  "peerDependencies": {
+    "eslint": "^8.50.0",
+    "eslint-define-config": "^1.23.0",
+    "prettier": "^3.0.3"
+  },
+  "peerDependenciesMeta": {
+    "eslint": {
+      "optional": false
+    },
+    "eslint-define-config": {
+      "optional": true
+    },
+    "prettier": {
+      "optional": false
+    }
+  },
+  "dependencies": {
+    "eslint-define-config": "^1.23.0"
+  }
+}

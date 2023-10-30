@@ -1,0 +1,3 @@
+<template>
+  access-tokens
+</template>

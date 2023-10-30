@@ -1,0 +1,28 @@
+@import './tailwind.css';
+
+html, body, #app {
+    min-height: 100vh;
+}
+
+#app {
+    @apply flex flex-col grow;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    @apply transition-opacity duration-200;
+}
+
+.fade-enter,
+.fade-leave-to {
+    @apply opacity-0;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+}
+
+input[data-autocompleted] {
+    background-color: transparent !important;
+}

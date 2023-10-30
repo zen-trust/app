@@ -1,0 +1,53 @@
+{
+  "name": "@zen-trust/client",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "run-p declarations type-check \"build-only {@}\" --",
+    "preview": "vite preview",
+    "build-only": "vite build",
+    "declarations": "vue-tsc --declaration --emitDeclarationOnly -p tsconfig.app.json --composite false",
+    "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "format": "prettier --write src/"
+  },
+  "dependencies": {
+    "@headlessui/vue": "^1.7.16",
+    "@simplewebauthn/browser": "^8.2.1",
+    "@simplewebauthn/typescript-types": "^8.0.0",
+    "@vojtechlanka/vue-tags-input": "^3.0.14",
+    "@vueuse/core": "^10.5.0",
+    "@webzlodimir/vue-avatar": "^0.0.8",
+    "ky": "^1.0.1",
+    "pinia": "^2.1.6",
+    "pinia-plugin-persistedstate": "^3.2.0",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4",
+    "vue-timeago3": "^2.3.1"
+  },
+  "devDependencies": {
+    "@tsconfig/node18": "^18.2.2",
+    "@types/node": "^18.17.17",
+    "@vitejs/plugin-vue": "^4.3.4",
+    "@vue/eslint-config-prettier": "^8.0.0",
+    "@vue/eslint-config-typescript": "^12.0.0",
+    "@vue/tsconfig": "^0.4.0",
+    "@zen-trust/code-style": "*",
+    "@zen-trust/json-api": "^0.0.0",
+    "@zen-trust/server": "^1.0.0",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.49.0",
+    "eslint-define-config": "^1.23.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "npm-run-all2": "^6.0.6",
+    "postcss": "^8.4.30",
+    "prettier": "^3.0.3",
+    "tailwindcss": "^3.3.3",
+    "typescript": "~5.2.0",
+    "vite": "^4.4.9",
+    "vite-plugin-webfont-dl": "^3.7.6",
+    "vue-tsc": "^1.8.11"
+  }
+}

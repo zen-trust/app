@@ -1,0 +1,86 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    command: [ "npm", "run", "--workspace", "packages/server", "dev" ]
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: "postgres://${DATABASE_USER:-zen_trust}:${DATABASE_PASSWORD:-zen_trust}@database:5432/${DATABASE_NAME:-zen_trust}?sslmode=disable"
+      SECRET_KEY: "${SECRET_KEY:-snake_oil}"
+      JWT_SECRET: "${JWT_SECRET:-snake_oil}"
+      SESSION_SECRET: "${SESSION_SECRET:-snake_oil}"
+      WEBAUTHN_ORIGIN: "${WEBAUTHN_ORIGIN:-localhost}"
+      PUBLIC_URL: "${PUBLIC_URL:-http://localhost:5173}"
+      LISTEN_HOST: "${LISTEN_HOST:-0.0.0.0}"
+      LISTEN_PORT: "${LISTEN_PORT:-3000}"
+    volumes:
+      - ./packages/server/src:/app/packages/server/src:cached
+      - ./packages/server/.swcrc:/app/packages/server/.swcrc:cached
+      - ./packages/server/tsconfig.json:/app/packages/server/tsconfig.json:cached
+      - ./packages/server/package.json:/app/packages/server/package.json:cached
+      - ./packages/server/zapatosconfig.json:/app/packages/server/zapatosconfig.json:cached
+      - ./package.json:/app/package.json:cached
+      - ./README.md:/app/README.md:cached
+    networks:
+      - zen-trust
+    ports:
+      - 127.0.0.1:3000:3000
+
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    command: [ "npm", "run", "--workspace", "packages/client", "dev" ]
+    restart: unless-stopped
+    environment: { }
+    volumes:
+      - ./packages/client/public:/app/packages/client/public:cached
+      - ./packages/client/src:/app/packages/client/src:cached
+      - ./packages/client/env.d.ts:/app/packages/client/env.d.ts:cached
+      - ./packages/client/index.html:/app/packages/client/index.html:cached
+      - ./packages/client/tsconfig.json:/app/packages/client/tsconfig.json:cached
+      - ./packages/client/tsconfig.node.json:/app/packages/client/tsconfig.node.json:cached
+      - ./packages/client/tsconfig.app.json:/app/packages/client/tsconfig.app.json:cached
+      - ./packages/client/vite.config.ts:/app/packages/client/vite.config.ts:cached
+      - ./packages/client/postcss.config.js:/app/packages/client/postcss.config.js:cached
+      - ./packages/client/tailwind.config.js:/app/packages/client/tailwind.config.js:cached
+      - ./public:/app/public:cached
+      - ./package.json:/app/package.json:cached
+    networks:
+      - zen-trust
+    ports:
+      - 127.0.0.1:5173:5173
+
+  database:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${DATABASE_USER:-zen_trust}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-zen_trust}
+      POSTGRES_DB: ${DATABASE_NAME:-zen_trust}
+    volumes:
+      - ./var/postgres:/var/lib/postgresql/data:delegated
+    networks:
+      - zen-trust
+      - database
+    ports:
+      - 127.0.0.1:5432:5432
+    expose:
+      - 5432
+
+  migrations:
+    profiles:
+      - migrations
+    image: amacneil/dbmate
+    environment:
+      DATABASE_URL: "postgres://${DATABASE_USER:-zen_trust}:${DATABASE_PASSWORD:-zen_trust}@database:5432/${DATABASE_NAME:-zen_trust}?sslmode=disable"
+    volumes:
+      - ./var/share/migrations:/var/share/migrations:cached
+    networks:
+      - database
+
+networks:
+  zen-trust:
+  database:

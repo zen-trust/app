@@ -1,0 +1,6 @@
+.idea/
+node_modules/
+dist/
+var/
+README.md
+docker-compose.yaml

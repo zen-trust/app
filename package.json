@@ -1,0 +1,26 @@
+{
+  "name": "@zen-trust/zen-trust",
+  "version": "1.0.0",
+  "description": "Zen Trust is a self-hosted SSH certificate authority, providing short-lived certificates for users and hosts.",
+  "main": "index.js",
+  "bin": {
+    "zen-trust": "bin/zen.js"
+  },
+  "dependencies": {
+    "workspaces-run": "^1.0.2"
+  },
+  "scripts": {
+    "dev": "workspaces-run --parallel -- npm run --no-update-notifier dev",
+    "build": "workspaces-run --parallel -- npm run --no-update-notifier build",
+    "start": "workspaces-run --parallel -- npm run --no-update-notifier start"
+  },
+  "author": "Moritz Friedrich <m@9dev.de>",
+  "license": "ISC",
+  "workspaces": [
+    "packages/code-style",
+    "packages/json-api",
+    "packages/server",
+    "packages/client",
+    "packages/cli"
+  ]
+}

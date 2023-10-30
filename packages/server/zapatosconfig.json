@@ -1,0 +1,26 @@
+{
+  "db": {
+    "connectionString": "{{DATABASE_URL}}"
+  },
+  "progressListener": true,
+  "warningListener": true,
+  "schemaJSDoc": false,
+  "outDir": "./src",
+  "unprefixedSchema": "public",
+  "schemas": {
+    "auth": {
+      "include": "*",
+      "exclude": []
+    },
+    "oauth": {
+      "include": "*",
+      "exclude": []
+    },
+    "public": {
+      "include": "*",
+      "exclude": [
+        "schema_migrations"
+      ]
+    }
+  }
+}

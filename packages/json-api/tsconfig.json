@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "incremental": false,
+    "target": "ESNext",
+    // "lib": [],                                        /* Specify a set of bundled library declaration files that describe the target runtime environment. */
+    // "experimentalDecorators": true,                   /* Enable experimental support for legacy experimental decorators. */
+    // "emitDecoratorMetadata": true,                    /* Emit design-type metadata for decorated declarations in source files. */
+    "moduleDetection": "auto",
+    "module": "NodeNext",
+    "rootDir": "./src",
+    "moduleResolution": "nodenext",
+    // "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
+    // "paths": {},                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
+    // "moduleSuffixes": [],                             /* List of file name suffixes to search when resolving a module. */
+    // "allowImportingTsExtensions": true,               /* Allow imports to include TypeScript file extensions. Requires '--moduleResolution bundler' and either '--noEmit' or '--emitDeclarationOnly' to be set. */
+    // "resolvePackageJsonExports": true,                /* Use the package.json 'exports' field when resolving package imports. */
+    // "resolvePackageJsonImports": true,                /* Use the package.json 'imports' field when resolving imports. */
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "removeComments": false,
+    // "isolatedModules": true,                          /* Ensure that each file can be safely transpiled without relying on other imports. */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  }
+}
