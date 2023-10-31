@@ -19,7 +19,7 @@ const menu = [
 </script>
 
 <template>
-  <article class="flex flex-col grow h-full dark:text-gray-300">
+  <article class="flex flex-col grow h-full dark:text-gray-300 selection:bg-green-700 selection:text-gray-200">
     <header
       class="flex px-4 w-full max-w-6xl mx-auto border-b border-gray-100 dark:border-gray-800 select-none"
     >
@@ -33,12 +33,12 @@ const menu = [
         />
       </router-link>
 
-      <nav class="mx-8 flex-1 flex space-x-4">
+      <nav class="mx-8 flex-1 flex space-x-4 text-gray-700 dark:text-gray-400">
         <router-link
           v-for="item in menu"
           :key="item.path"
           :to="item.path"
-          exact-active-class="border-b-green-500 hover:border-b-green-500"
+          active-class="border-b-green-500 hover:border-b-green-500 text-black dark:text-white font-medium"
           class="flex px-2 mx-2 hover:text-black dark:hover:text-white hover:border-b-green-500/50 items-center border-y-4 border-transparent transition"
         >
           <span v-text="item.title"/>
