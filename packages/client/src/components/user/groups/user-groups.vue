@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, ref, toRef } from 'vue'
 import type { Group, User } from '@zen-trust/server'
 import ZButton from '@/components/z-button.vue'
 import UserGroupList from '@/components/user/groups/group-list.vue'
 import AddGroupsModal from '@/components/user/add-groups-modal.vue'
+import ZPopout from '@/components/z-popout.vue'
 
 const props = defineProps<{
   loading?: boolean
@@ -13,7 +14,8 @@ const emit = defineEmits<{
   remove: [Group]
 }>()
 const addModalOpen = ref(false)
-const groups = computed<Group[]>(() => props.user.groups ?? [])
+const user = toRef(props, 'user')
+const groups = computed<Group[]>(() => user.value.groups ?? [])
 
 function showAddModal() {
   addModalOpen.value = true
@@ -25,12 +27,10 @@ function removeGroup(group: Group) {
 </script>
 
 <template>
-  <section class="p-6 pb-2">
-    <header class="flex items-start justify-between mb-2">
-      <h3 class="text-lg font-medium">Groups</h3>
-
-      <z-button subtle :disabled="loading" @click="showAddModal">Add groups</z-button>
-    </header>
+  <z-popout title="Groups">
+    <template #actions>
+      <z-button :disabled="loading" subtle @click="showAddModal">Add groups</z-button>
+    </template>
 
     <user-group-list :groups="groups" @remove="removeGroup" />
     <footer
@@ -41,5 +41,5 @@ function removeGroup(group: Group) {
       <code>{{ groups.length }}</code>
     </footer>
     <add-groups-modal v-model="addModalOpen" :user="user" />
-  </section>
+  </z-popout>
 </template>

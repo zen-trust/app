@@ -3,6 +3,7 @@ import { useOnboardingStore } from '@/stores/onboarding'
 import { useProfileStore } from '@/stores/profile'
 import { useGroupStore } from '@/stores/group'
 import { useUserStore } from '@/stores/user'
+import { idToUrn } from '@/lib/utils'
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -107,83 +108,96 @@ export const router = createRouter({
         },
         {
           path: 'users',
-          name: 'team.users',
-          component: () => import('../views/team/users/user-list.vue'),
-          beforeEnter: async (_to, _from, next) => {
-            const teamStore = useUserStore()
-            await Promise.all([teamStore.fetchUsers(), teamStore.fetchInvitations()])
+          component: () => import('../views/team/users/users-root.vue'),
+          children: [
+            {
+              path: '',
+              name: 'team.users',
+              props: ({ query }) => ({ query: query.query }),
+              component: () => import('../views/team/users/user-list.vue'),
+              beforeEnter: async (_to, _from, next) => {
+                const teamStore = useUserStore()
+                await Promise.all([teamStore.fetchUsers(), teamStore.fetchInvitations()])
 
-            next()
-          },
-        },
-        {
-          path: 'users/:id',
-          name: 'team.users.single',
-          props: true,
-          component: () => import('../views/team/users/single-user.vue'),
-          beforeEnter: async (to, _from, next) => {
-            const teamStore = useUserStore()
-            const groupStore = useGroupStore()
-            await Promise.all([
-              teamStore.fetchUser(to.params.id as string),
-              groupStore.fetchGroups(),
-            ])
+                next()
+              },
+            },
+            {
+              path: ':id',
+              name: 'team.users.single',
+              props: ({ params }) => ({ id: idToUrn(params.id as string, 'user') }),
+              component: () => import('../views/team/users/single-user.vue'),
+              beforeEnter: async (to, _from, next) => {
+                const teamStore = useUserStore()
+                const groupStore = useGroupStore()
+                await Promise.all([
+                  teamStore.fetchUser(to.params.id as string),
+                  groupStore.fetchGroups(),
+                ])
 
-            next()
-          },
-        },
-        {
-          path: ':id/edit',
-          name: 'team.users.edit',
-          props: true,
-          component: () => import('../views/team/users/edit-user.vue'),
+                next()
+              },
+            },
+            {
+              path: ':id/edit',
+              name: 'team.users.edit',
+              props: ({ params }) => ({ id: idToUrn(params.id as string, 'user') }),
+              component: () => import('../views/team/users/edit-user.vue'),
+            },
+          ],
         },
         {
           path: 'groups',
-          name: 'team.groups',
-          props: ({ query }) => ({ query: query.query }),
-          component: () => import('../views/team/groups/group-list.vue'),
-          beforeEnter: async (_to, _from, next) => {
-            const groupStore = useGroupStore()
-            await groupStore.fetchGroups()
+          component: () => import('../views/team/groups/groups-root.vue'),
+          children: [
+            {
+              path: '',
+              name: 'team.groups',
+              props: ({ query }) => ({ query: query.query }),
+              component: () => import('../views/team/groups/group-list.vue'),
+              beforeEnter: async (_to, _from, next) => {
+                const groupStore = useGroupStore()
+                await groupStore.fetchGroups()
 
-            next()
-          },
-        },
-        {
-          path: 'groups/create',
-          name: 'team.groups.create',
-          component: () => import('../views/team/groups/create-group.vue'),
-        },
-        {
-          path: 'groups/:id',
-          name: 'team.groups.single',
-          props: true,
-          component: () => import('../views/team/groups/single-group.vue'),
-          beforeEnter: async (to, _from, next) => {
-            const groupStore = useGroupStore()
-            await groupStore.fetchGroup(to.params.id as string)
+                next()
+              },
+            },
+            {
+              path: 'create',
+              name: 'team.groups.create',
+              component: () => import('../views/team/groups/create-group.vue'),
+            },
+            {
+              path: ':id',
+              name: 'team.groups.single',
+              props: ({ params }) => ({ id: idToUrn(params.id as string, 'group') }),
+              component: () => import('../views/team/groups/single-group.vue'),
+              beforeEnter: async (to, _from, next) => {
+                const groupStore = useGroupStore()
+                await groupStore.fetchGroup(to.params.id as string)
 
-            next()
-          },
-        },
-        {
-          path: 'groups/:id/edit',
-          name: 'team.groups.edit',
-          props: true,
-          beforeEnter: async (to, _from, next) => {
-            const groupStore = useGroupStore()
-            const groupId = to.params.id as string
-            await groupStore.fetchGroup(groupId)
-            const group = groupStore.findById(groupId)
+                next()
+              },
+            },
+            {
+              path: ':id/edit',
+              name: 'team.groups.edit',
+              props: true,
+              beforeEnter: async (to, _from, next) => {
+                const groupStore = useGroupStore()
+                const groupId = to.params.id as string
+                await groupStore.fetchGroup(groupId)
+                const group = groupStore.findById(groupId)
 
-            if (group?.system) {
-              next({ name: 'team.groups.single', params: { id: groupId } })
-            }
+                if (group?.system) {
+                  next({ name: 'team.groups.single', params: { id: groupId } })
+                }
 
-            next()
-          },
-          component: () => import('../views/team/groups/edit-group.vue'),
+                next()
+              },
+              component: () => import('../views/team/groups/edit-group.vue'),
+            },
+          ],
         },
         {
           path: 'invitations',

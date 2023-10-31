@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { Group } from '@zen-trust/server'
+import type { Group } from '@zen-trust/server'
 import { ref } from 'vue'
-import {truncate, urnToId} from '@/lib/utils'
+import { truncate, urnToId } from '@/lib/utils'
 import IconAvatar from '@/components/avatar/icon-avatar.vue'
 import ZListItem from '@/components/list/z-list-item.vue'
 import ZConfirmation from '@/components/z-confirmation.vue'
@@ -29,8 +29,8 @@ function removeGroup() {
 <template>
   <z-list-item
     :actions="{ remove: 'Remove' }"
-    :title="group.name"
     :subtitle="truncate(group.description, 15)"
+    :title="group.name"
     :to="{ name: 'team.groups.single', params: { id: urnToId(group.id) } }"
     @action="handleAction"
   >

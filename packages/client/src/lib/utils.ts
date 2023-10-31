@@ -44,3 +44,7 @@ export function urnToId(urn: string): string {
 export function urnToType(urn: string): string {
   return urn.split(':').slice(0, -1).pop() ?? ''
 }
+
+export function idToUrn(id: string, type: string): string {
+  return `urn:zen-trust:${type}:${id}`
+}

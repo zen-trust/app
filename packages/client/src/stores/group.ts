@@ -4,12 +4,14 @@ import type { Group, User } from '@zen-trust/server'
 export const useGroupStore = defineStore('group', {
   state: () => ({
     groups: [] as Group[],
+    lastUpdated: new Date(),
     members: {} as Record<Group['id'], (User | Group)[]>,
   }),
 
   actions: {
     async fetchGroups() {
       this.groups = await this.$api.all<Group>('group')
+      this.lastUpdated = new Date()
     },
 
     async search(query: string) {
@@ -18,6 +20,7 @@ export const useGroupStore = defineStore('group', {
           query,
         },
       })
+      this.lastUpdated = new Date()
     },
 
     async suggestMembers(group: Group, query: string) {
@@ -38,6 +41,7 @@ export const useGroupStore = defineStore('group', {
     async fetchGroup(id: string) {
       const group = await this.$api.single<Group>(`group/${id}`)
       this.groups = [...this.groups.filter((g) => g.id !== group.id), group]
+      this.lastUpdated = new Date()
     },
 
     async fetchGroupMembers(id: string) {

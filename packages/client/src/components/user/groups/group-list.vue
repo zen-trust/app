@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Group } from '@zen-trust/server'
+import type { Group } from '@zen-trust/server'
 import ZList from '@/components/list/z-list.vue'
 import GroupListItem from '@/components/user/groups/group-list-item.vue'
 

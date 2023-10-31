@@ -3,6 +3,7 @@ import type { RouteLocationRaw } from 'vue-router'
 
 defineProps<{
   to: string | RouteLocationRaw
+  title: string
   exact?: boolean
 }>()
 
@@ -20,6 +21,6 @@ const activeClasses =
     :exact-active-class="activeClasses"
     :to="to"
   >
-    <slot />
+    <span v-text="title"/>
   </router-link>
 </template>

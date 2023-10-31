@@ -6,20 +6,33 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     users: [] as User[],
     invitations: [] as Invitation[],
+    lastUpdated: new Date(),
   }),
 
   actions: {
     // region Users
     async fetchUsers() {
       this.users = await this.$api.all<User>('user')
+      this.lastUpdated = new Date()
+    },
+
+    async search(query: string) {
+      this.users = await this.$api.all<User>('user', {
+        searchParams: {
+          query,
+        },
+      })
+      this.lastUpdated = new Date()
     },
 
     async fetchUser(id: string) {
-      const user = await this.$api.single<User>(`user/${id}`, {
+      const userId = urnToId(id)
+      const user = await this.$api.single<User>(`user/${userId}`, {
         searchParams: [['include', 'groups']],
       })
 
       this.users = [...this.users.filter((u) => u.id !== user.id), user]
+      this.lastUpdated = new Date()
     },
 
     async deleteUser(user: User) {
@@ -89,10 +102,10 @@ export const useUserStore = defineStore('user', {
       return state.users
     },
 
-    findById:
-      (state) =>
-      (id: string): User | undefined => {
+    findById(state) {
+      return (id: string): User | undefined => {
         return state.users.find((user) => user.id === `urn:zen-trust:user:${id}`)
-      },
+      }
+    },
   },
 })

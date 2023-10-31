@@ -3,25 +3,43 @@ import type { Group } from '@zen-trust/server'
 import { computed, ref, watch } from 'vue'
 import { useGroupStore } from '@/stores/group'
 import Icon from '@/components/z-icon.vue'
+import ZIcon from '@/components/z-icon.vue'
 import ZButton from '@/components/z-button.vue'
 import ZTextField from '@/components/fields/z-text-field.vue'
 import { truncate, urnToId } from '@/lib/utils'
 import { router } from '@/router'
 import ZList from '@/components/list/z-list.vue'
 import ZListItem from '@/components/list/z-list-item.vue'
+import { storeToRefs } from 'pinia'
 
 const props = defineProps<{
   query?: string
 }>()
 const groupStore = useGroupStore()
+const { groups, lastUpdated } = storeToRefs(groupStore)
 const currentQuery = computed(() => props.query)
 const searchTerm = ref(props.query ?? '')
+const loading = ref(false)
 
 function search() {
   router.push({ query: { query: searchTerm.value } })
 }
 
-watch(currentQuery, (query) => (query ? groupStore.search(query) : groupStore.fetchGroups()))
+watch(currentQuery, () => loadGroups())
+
+async function loadGroups() {
+  loading.value = true
+
+  try {
+    if (currentQuery.value) {
+      await groupStore.search(currentQuery.value)
+    } else {
+      await groupStore.fetchGroups()
+    }
+  } finally {
+    loading.value = false
+  }
+}
 
 function groupRoute(group: Group) {
   return {
@@ -66,7 +84,7 @@ function groupRoute(group: Group) {
   <section class="mt-4">
     <z-list>
       <z-list-item
-        v-for="group in groupStore.groups"
+        v-for="group in groups"
         :key="group.id"
         :subtitle="group.description"
         :title="group.name"
@@ -112,8 +130,29 @@ function groupRoute(group: Group) {
     </z-list>
   </section>
 
-  <footer class="mt-4 text-xs text-gray-500 py-2 border-t border-gray-100 dark:border-gray-800">
-    <span>Total:&nbsp;</span>
-    <code>{{ groupStore.groups.length }}</code>
+  <footer
+    class="mt-4 text-xs text-gray-500 flex items-center justify-between py-2 border-t border-gray-100 dark:border-gray-800"
+  >
+    <div>
+      <span>Total:&nbsp;</span>
+      <code>{{ groups.length }}</code>
+    </div>
+
+    <div
+      :class="{ 'pointer-events-none': loading }"
+      class="flex items-center group cursor-pointer"
+      @click="loadGroups"
+    >
+      <z-icon
+        :class="{ 'animate-spin': loading }"
+        class="mr-1 hover:no-underline text-xs"
+        name="refresh"
+      />
+      <span v-if="loading">Loading...</span>
+      <span v-else class="group-hover:underline">
+        <span>Last updated:&nbsp;</span>
+        <timeago :datetime="lastUpdated" :title="lastUpdated" />
+      </span>
+    </div>
   </footer>
 </template>
