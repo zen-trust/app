@@ -228,18 +228,18 @@ export function buildContext(client: typeof ky) {
   }
 }
 
-interface UpdateResourceOptions<A extends Attributes> {
+export interface UpdateResourceOptions<A extends Attributes> {
   id: string
   type: string
   attributes: Partial<A>
 }
 
-interface CreateResourceOptions<A extends Attributes> {
+export interface CreateResourceOptions<A extends Attributes> {
   type: string
   attributes: Partial<A>
 }
 
-interface CreateRelationshipOptions<A extends Attributes> {
+export interface CreateRelationshipOptions<A extends Attributes> {
   type: A['type']
   id: A['id']
 }
