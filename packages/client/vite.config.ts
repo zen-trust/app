@@ -1,9 +1,9 @@
-import { fileURLToPath, URL } from "node:url";
-import { defineConfig, HttpProxy, loadEnv, ProxyOptions } from "vite";
-import vue from "@vitejs/plugin-vue";
-import { performance } from "perf_hooks";
-import { IncomingMessage, ServerResponse } from "http";
-import { webfontDownload } from "vite-plugin-webfont-dl";
+import { fileURLToPath, URL } from 'node:url'
+import { defineConfig, HttpProxy, loadEnv, ProxyOptions } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { performance } from 'perf_hooks'
+import { IncomingMessage, ServerResponse } from 'http'
+import { webfontDownload } from 'vite-plugin-webfont-dl'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -12,20 +12,17 @@ export default defineConfig(({ mode }) => {
 
   return {
     root: fileURLToPath(new URL('.', import.meta.url)),
-    plugins: [
-      webfontDownload(),
-      vue()
-    ],
+    plugins: [webfontDownload(undefined, { cache: true }), vue()],
 
     resolve: {
       alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url))
-      }
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+      },
     },
 
     build: {
       sourcemap: true,
-      manifest: true
+      manifest: true,
     },
 
     server: {
@@ -37,19 +34,19 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           configure(proxy: HttpProxy.Server, options) {
             proxy.on('proxyRes', (_, request, response) =>
-              logProxyRequest(request, response, options)
+              logProxyRequest(request, response, options),
             )
           },
-          rewrite: (path) => path.replace(new RegExp(`^${apiUrlPathPrefix}`), '')
-        }
-      }
-    }
+          rewrite: (path) => path.replace(new RegExp(`^${apiUrlPathPrefix}`), ''),
+        },
+      },
+    },
   }
 
   function logProxyRequest<T extends IncomingMessage>(
     request: T,
     response: ServerResponse<T>,
-    options: ProxyOptions
+    options: ProxyOptions,
   ): void {
     performance.mark('start')
 
@@ -60,12 +57,12 @@ export default defineConfig(({ mode }) => {
         hour12: true,
         hour: 'numeric',
         minute: 'numeric',
-        second: 'numeric'
+        second: 'numeric',
       })
       const url = apiUrlPathPrefix + request.url
       const upstreamUrl = new URL(
         <string>request.url,
-        options.target?.toString() ?? 'http://unknown'
+        options.target?.toString() ?? 'http://unknown',
       )
       const durationSeconds = (duration / 1000).toLocaleString('en-US', {
         maximumFractionDigits: 6,
@@ -73,11 +70,11 @@ export default defineConfig(({ mode }) => {
         useGrouping: false,
         unitDisplay: 'narrow',
         style: 'unit',
-        unit: 'second'
+        unit: 'second',
       })
 
       console.log(
-        `${time} [proxy] ${request.method} ${url} → ${upstreamUrl} ${response.statusCode} (${durationSeconds})`
+        `${time} [proxy] ${request.method} ${url} → ${upstreamUrl} ${response.statusCode} (${durationSeconds})`,
       )
     })
   }
